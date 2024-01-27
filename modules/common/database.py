@@ -4,7 +4,7 @@ import sqlite3
 class Database():
 
     def __init__(self):
-        self.connection = sqlite3.connect(r'C:\Users\maryf\Desktop\QA-auto-2023' + r'\become_qa_auto.db')
+        self.connection = sqlite3.connect(r'C:\Users\maryf\Desktop\QA-auto-2023\become_qa_auto.db')
         self.cursor = self.connection.cursor()
 
     def test_connection(self):
@@ -27,11 +27,12 @@ class Database():
     
     def update_product_qnt_by_id(self, product_id, qnt):
         query = f"UPDATE products SET quantity = {qnt} WHERE id = {product_id}"
+        print(query)
         self.cursor.execute(query)
         self.connection.commit()
 
-    def select_product_qnt_by_id(self, product_id):
-        query = f"SELECT quantity FROM products WHERE id = {product_id}"
+    def select_product_field_by_id(self, field, product_id):
+        query = f"SELECT {field} FROM products WHERE id = {product_id}"
         self.cursor.execute(query)
         record = self.cursor.fetchall()
         return record
@@ -57,3 +58,57 @@ class Database():
         record = self.cursor.fetchall()
         return record 
     
+    def updade_product_description_by_id(self, product_id, description):
+        query = f"UPDATE products SET description = '{description}' WHERE id = {product_id}"
+        self.cursor.execute(query)
+        self.connection.commit()
+
+    def insert_users(self, user_id, name, address, city, postalCode, country):
+        query = f"INSERT OR REPLACE INTO customers (id, name, address, city, postalCode, country) \
+            VALUES ({user_id}, '{name}', '{address}', '{city}', '{postalCode}', '{country}')"
+        self.cursor.execute(query)
+        self.connection.commit()
+
+    def get_users_field_by_id(self, field, user_id):
+        query = f"SELECT {field} FROM customers WHERE id = {user_id}"
+        self.cursor.execute(query)
+        record = self.cursor.fetchall()
+        return record
+    
+    def update_user_address(self, user_id, address):
+        query = f"UPDATE customers SET address = '{address}' WHERE id = {user_id}"  
+        self.cursor.execute(query)
+        self.connection.commit()
+
+    def delete_user_by_id(self, user_id):
+        query = f"DELETE FROM customers WHERE id = {user_id}"
+        self.cursor.execute(query)
+        self.connection.commit()
+
+    def insert_product_with_duplication(self, product_id, name):
+        query = f"INSERT INTO products (id, name) \
+            VALUES ({product_id},'{name}')"
+        self.cursor.execute(query)
+        self.connection.commit()
+
+    def insert_user_with_duplication(self, user_id, name):
+        query = f"INSERT INTO customers (id, name) \
+            VALUES ({user_id},'{name}')"
+        self.cursor.execute(query)
+        self.connection.commit()
+
+    def insert_order(self, order_id, user_id, product_id):
+        query = f"INSERT OR REPLACE INTO orders (id, customer_id, product_id) \
+                VALUES ({order_id}, {user_id}, {product_id})"
+        self.cursor.execute(query)
+        self.connection.commit()
+
+    def update_order(self, order_id, product_id):
+        query = f"UPDATE orders SET product_id = {product_id} WHERE id = {order_id}"
+        self.cursor.execute(query)
+        self.connection.commit()
+
+    def delete_order(self, order_id):
+        query = f"DELETE FROM orders WHERE id = {order_id}"
+        self.cursor.connection(query)
+        self.connection.commit()
