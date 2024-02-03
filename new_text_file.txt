@@ -1,7 +1,0 @@
-new file
-testing branch >> new_text_file.txt
-
-echo testing branch >> new_text_file.txt
-
-echo testing branch
-testing branch
